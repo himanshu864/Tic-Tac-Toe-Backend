@@ -6,7 +6,9 @@ const io = require("socket.io")(3000, {
 
 const { v4: uuidv4 } = require("uuid");
 
+const lonelySockets = [];
 const rooms = {};
+const friendRooms = {};
 
 io.on("connection", (socket) => {
   console.log(`Socket connected: ${socket.id}`);
@@ -28,10 +30,27 @@ io.on("connection", (socket) => {
       }
       rooms[room].push(socket.id);
       const playerSocket = rooms[room][0];
-      socket.to(playerSocket).emit("opponent-join");
+      socket.to(playerSocket).emit("friend-join");
       cb(null);
     } catch (error) {
       cb({ error: "Failed to join room" });
+    }
+  });
+
+  socket.on("random-room", (cb) => {
+    try {
+      if (lonelySockets.length === 0) {
+        lonelySockets.push(socket.id);
+        cb(null, true);
+      } else {
+        const room = uuidv4();
+        const randomDude = lonelySockets.pop();
+        socket.to(randomDude).emit("random-join");
+        friendRooms[room] = [socket.id, randomDude];
+        cb(null, false);
+      }
+    } catch (error) {
+      cb({ error: "Failed to join random room" });
     }
   });
 
