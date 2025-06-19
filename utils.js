@@ -1,10 +1,10 @@
-export const initialGrid = [
+const initialGrid = [
   [-1, -1, -1],
   [-1, -1, -1],
   [-1, -1, -1],
 ];
 
-export const combinations = [
+const combinations = [
   [0, 1, 2],
   [3, 4, 5],
   [6, 7, 8],
@@ -15,14 +15,14 @@ export const combinations = [
   [2, 4, 6],
 ];
 
-export function availableMoves(grid) {
+function availableMoves(grid) {
   const moves = [];
   for (let i = 0; i < 9; i++)
     if (grid[Math.floor(i / 3)][i % 3] === -1) moves.push(i);
   return moves;
 }
 
-export function winCheck(grid) {
+function winCheck(grid) {
   for (const line of combinations) {
     if (line.every((i) => grid[Math.floor(i / 3)][i % 3] === 0)) return 0; // Player wins
     if (line.every((i) => grid[Math.floor(i / 3)][i % 3] === 1)) return 1; // Computer wins
@@ -31,7 +31,7 @@ export function winCheck(grid) {
   return -1; // nothing
 }
 
-export function blinkIt(newGrid) {
+function blinkIt(newGrid) {
   const blinker = new Array(9).fill(false);
   for (const line of combinations)
     if (
@@ -41,3 +41,11 @@ export function blinkIt(newGrid) {
       line.forEach((cell) => (blinker[cell] = true));
   return blinker;
 }
+
+module.exports = {
+  initialGrid,
+  combinations,
+  availableMoves,
+  winCheck,
+  blinkIt,
+};
