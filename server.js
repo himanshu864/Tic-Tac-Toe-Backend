@@ -4,8 +4,14 @@ const server = createServer((req, res) => {
   res.end("Server is running");
 });
 
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+
 const io = require("socket.io")(server, {
-  cors: { origin: true },
+  cors: {
+    origin: [FRONTEND_URL], // add any other allowed origins here
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
 });
 
 const { v4: uuidv4 } = require("uuid");
