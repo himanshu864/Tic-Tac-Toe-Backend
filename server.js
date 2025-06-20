@@ -152,7 +152,8 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(process.env.PORT || 3000, "0.0.0.0", () => {
-  console.log(`Server is running on port ${process.env.PORT || 3000}`);
+const PORT = Number(process.env.PORT) || 3000;
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server is running on port ${PORT}`);
 });
 module.exports = server; // Export the server for testing purposes
