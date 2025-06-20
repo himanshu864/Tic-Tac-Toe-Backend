@@ -1,5 +1,10 @@
-const PORT = process.env.PORT || 3000;
-const io = require("socket.io")(PORT, {
+const { createServer } = require("http");
+const server = createServer((req, res) => {
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("Server is running");
+});
+
+const io = require("socket.io")(server, {
   cors: { origin: true },
 });
 
@@ -146,3 +151,8 @@ io.on("connection", (socket) => {
     }
   });
 });
+
+server.listen(process.env.PORT || 3000, "0.0.0.0", () => {
+  console.log(`Server is running on port ${process.env.PORT || 3000}`);
+});
+module.exports = server; // Export the server for testing purposes
